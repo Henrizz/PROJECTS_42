@@ -6,7 +6,7 @@
 /*   By: hzimmerm <hzimmerm@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:41:44 by hzimmerm          #+#    #+#             */
-/*   Updated: 2024/02/16 17:53:08 by hzimmerm         ###   ########.fr       */
+/*   Updated: 2024/02/16 18:19:03 by hzimmerm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ char	*ft_read_and_check(int fd, char *temp)
 		temp = (char *)ft_calloc(1, sizeof(char));
 	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (!buffer)
+	{
+		free(temp);
 		return (NULL);
+	}
 	bytes_read = 1;
 	while (new_line_check(temp) == 0 && bytes_read != 0)
 	{
@@ -70,6 +73,8 @@ char	*ft_read_and_check(int fd, char *temp)
 			free(buffer);
 			return (NULL);
 		}
+		else if (bytes_read == 0)
+			break ;
 		buffer[bytes_read] = '\0';
 		temp = ft_strjoin(temp, buffer);
 	}

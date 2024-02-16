@@ -6,7 +6,7 @@
 /*   By: hzimmerm <hzimmerm@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:41:49 by hzimmerm          #+#    #+#             */
-/*   Updated: 2024/02/16 18:06:21 by hzimmerm         ###   ########.fr       */
+/*   Updated: 2024/02/16 18:13:53 by hzimmerm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ char	*get_next_line(int fd)
 	if (!temp)
 		return (NULL);
 	line = ft_excerpt_line(temp);
+	if (!line)
+		return (NULL);
 	temp = keep_rest(temp);
 	return (line);
 }
