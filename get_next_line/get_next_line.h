@@ -6,7 +6,7 @@
 /*   By: hzimmerm <hzimmerm@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:30:03 by hzimmerm          #+#    #+#             */
-/*   Updated: 2024/02/13 17:18:41 by hzimmerm         ###   ########.fr       */
+/*   Updated: 2024/02/16 17:57:03 by hzimmerm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
-int	ft_read_and_check(int fd, char *buffer, size_t bytes, char *temp, char *line);
-size_t	ft_strlcpy(char *dst, char *src, size_t	size);
-//size_t	ft_strlcat(char *dst, const char *src, size_t size);
+char	*ft_read_and_check(int fd, char *temp);
+char	*ft_excerpt_line(char *temp);
+char	*keep_rest(char *temp);
+int		new_line_check(const char *str);
+void	*ft_calloc(size_t count, size_t size);
 
 #endif

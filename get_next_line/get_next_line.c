@@ -6,13 +6,12 @@
 /*   By: hzimmerm <hzimmerm@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:41:49 by hzimmerm          #+#    #+#             */
-/*   Updated: 2024/02/13 17:19:36 by hzimmerm         ###   ########.fr       */
+/*   Updated: 2024/02/16 18:06:21 by hzimmerm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-//check if there is \n inside temp 
 int	new_line_check(const char *str)
 {
 	int	i;
@@ -30,22 +29,21 @@ int	new_line_check(const char *str)
 char	*ft_excerpt_line(char *temp)
 {
 	int		i;
-	int		j;
 	char	*line;
 
 	i = 0;
-	j = 0;
 	if (!temp[i])
 		return (NULL);
 	while (temp[i] != '\n' && temp[i] != '\0')
 		i++;
-	line = (char *)malloc((i + 1) * sizeof(char));
+	line = (char *)ft_calloc((i + 2), sizeof(char));
 	if (!line)
 		return (NULL);
-	while (j < i)
+	i = 0;
+	while (temp[i] != 0 && temp[i] != '\n')
 	{
-		line[j] = temp[j];
-		j++;
+		line[i] = temp[i];
+		i++;
 	}
 	line[i] = '\0';
 	return (line);
@@ -66,7 +64,7 @@ char	*keep_rest(char *temp)
 		free(temp);
 		return (NULL);
 	}
-	new_temp = (char *)malloc((ft_strlen(temp) - i + 1) * sizeof(char));
+	new_temp = (char *)ft_calloc((ft_strlen(temp) - i + 1), sizeof(char));
 	if (!new_temp)
 	{
 		free(temp);
@@ -74,31 +72,32 @@ char	*keep_rest(char *temp)
 	}
 	i++;
 	while (temp[i] != '\0')
-	{
-		new_temp[j] = temp[i];
-		j++;
-		i++;
-	}
-	new_temp[i] = '\0';
+		new_temp[j++] = temp[i++];
+	new_temp[j] = '\0';
 	free(temp);
 	return (new_temp);
 }
+
 char	*get_next_line(int fd)
 {
-	char		buffer[BUFFER_SIZE];
 	static char	*temp;
 	char		*line;
-	int			bytes_read;
-	
-	bytes_read = 1;
-	//printf("temp befor alloc: %s\n", temp);
-	if (!temp)
-		temp = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	{
+		if (temp)
+			free (temp);
+		return (NULL);
+	}
+	temp = ft_read_and_check(fd, temp);
 	if (!temp)
 		return (NULL);
-	//printf("temp after alloc: %s\n", temp);
-	line = NULL;
-	while (new_line_check(temp) == 0 && bytes_read != 0)
+	line = ft_excerpt_line(temp);
+	temp = keep_rest(temp);
+	return (line);
+}
+	/*
+	
 	{
 		bytes_read = ft_read_and_check(fd, buffer, BUFFER_SIZE, temp, line);
 		if (bytes_read == 0)
@@ -118,8 +117,7 @@ char	*get_next_line(int fd)
 		if (!temp)
 			return (NULL);
 	}
-	return (line);
-}
+	return (line);*/
 /*
 int	main(void)
 {

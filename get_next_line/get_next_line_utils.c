@@ -6,7 +6,7 @@
 /*   By: hzimmerm <hzimmerm@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:41:44 by hzimmerm          #+#    #+#             */
-/*   Updated: 2024/02/07 17:56:25 by hzimmerm         ###   ########.fr       */
+/*   Updated: 2024/02/16 17:53:08 by hzimmerm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	ft_strlen(const char *s)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (s[i] != 0)
@@ -30,7 +30,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	i = 0;
 	j = 0;
-	new = malloc((ft_strlen(s1) + ft_strlen(s2)) * sizeof(char const) + 1);
+	new = ft_calloc((ft_strlen(s1) + ft_strlen(s2)), sizeof(char const) + 1);
 	if (new == 0)
 		return (0);
 	while (s1[i] != 0)
@@ -50,27 +50,51 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (new);
 }
 
-//read into buffer + error handling
-int	ft_read_and_check(int fd, char *buffer, size_t bytes, char *temp, char *line)
+char	*ft_read_and_check(int fd, char *temp)
 {
-	int	bytes_read;
+	char	*buffer;
+	int		bytes_read;
 
-	bytes_read = read(fd, buffer, bytes);
-	if (bytes_read == -1)
+	if (!temp)
+		temp = (char *)ft_calloc(1, sizeof(char));
+	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
+	if (!buffer)
+		return (NULL);
+	bytes_read = 1;
+	while (new_line_check(temp) == 0 && bytes_read != 0)
 	{
-		free(temp);
-		free(line);
-		return (0);
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read == -1)
+		{
+			free(temp);
+			free(buffer);
+			return (NULL);
+		}
+		buffer[bytes_read] = '\0';
+		temp = ft_strjoin(temp, buffer);
 	}
-	if (bytes_read == 0)
-	{
-		free(temp);
-		free(line);
-		return (0);
-	}
-	return (bytes_read);
+	free(buffer);
+	return (temp);
 }
 
+void	*ft_calloc(size_t count, size_t size)
+{
+	size_t	i;
+	void	*ptr;
+
+	i = 0;
+	ptr = malloc(count * size);
+	if (ptr == 0)
+		return (0);
+	while (i < count * size)
+	{
+		((char *)ptr)[i] = 0;
+		i++;
+	}
+	return (ptr);
+}
+
+/*
 size_t	ft_strlcpy(char *dst, char *src, size_t	size)
 {
 	size_t	i;
@@ -87,7 +111,7 @@ size_t	ft_strlcpy(char *dst, char *src, size_t	size)
 	i = 0;
 	return (ft_strlen(src));
 }
-/*
+
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
 	size_t	i;
