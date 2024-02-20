@@ -6,7 +6,7 @@
 /*   By: hzimmerm <hzimmerm@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:41:44 by hzimmerm          #+#    #+#             */
-/*   Updated: 2024/02/20 15:40:36 by hzimmerm         ###   ########.fr       */
+/*   Updated: 2024/02/20 17:11:41 by hzimmerm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
-	new = ft_calloc((ft_strlen(s1) + ft_strlen(s2)), sizeof(char const) + 1);
+	new = ft_calloc((ft_strlen(s1) + ft_strlen(s2)) + 1, sizeof(char const));
 	if (new == 0)
 	{
 		free(s1);
@@ -55,28 +55,22 @@ char	*ft_read_and_check(int fd, char *temp)
 	char	*buffer;
 	int		bytes_read;
 
-	if (!temp)
-		temp = (char *)ft_calloc(1, sizeof(char));
 	buffer = (char *)ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (!buffer)
-	{
-		free(temp);
 		return (NULL);
-	}
-	//bytes_read = 1;
-	while (new_line_check(temp) == 0) //&& bytes_read != 0)
+	bytes_read = 1;
+	while (new_line_check(temp) == 0 && bytes_read != 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-		{
-			free(temp);
-			free(buffer);
-			return (NULL);
-		}
-		else if (bytes_read == 0)
+		if (bytes_read == 0)
 			break ;
 		buffer[bytes_read] = '\0';
 		temp = ft_strjoin(temp, buffer);
+	}
+	if (bytes_read == -1)
+	{
+		free(temp);
+		return (NULL);
 	}
 	free(buffer);
 	return (temp);
