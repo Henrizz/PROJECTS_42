@@ -6,7 +6,7 @@
 /*   By: hzimmerm <hzimmerm@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:41:44 by hzimmerm          #+#    #+#             */
-/*   Updated: 2024/02/16 18:19:03 by hzimmerm         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:40:36 by hzimmerm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*new;
 	int		i;
@@ -32,13 +32,12 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	j = 0;
 	new = ft_calloc((ft_strlen(s1) + ft_strlen(s2)), sizeof(char const) + 1);
 	if (new == 0)
-		return (0);
-	while (s1[i] != 0)
 	{
-		new[j] = s1[i];
-		i++;
-		j++;
+		free(s1);
+		return (0);
 	}
+	while (s1[i] != 0)
+		new[j++] = s1[i++];
 	i = 0;
 	while (s2[i] != 0)
 	{
@@ -47,6 +46,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		j++;
 	}
 	new[j] = 0;
+	free(s1);
 	return (new);
 }
 
@@ -63,8 +63,8 @@ char	*ft_read_and_check(int fd, char *temp)
 		free(temp);
 		return (NULL);
 	}
-	bytes_read = 1;
-	while (new_line_check(temp) == 0 && bytes_read != 0)
+	//bytes_read = 1;
+	while (new_line_check(temp) == 0) //&& bytes_read != 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -98,7 +98,6 @@ void	*ft_calloc(size_t count, size_t size)
 	}
 	return (ptr);
 }
-
 /*
 size_t	ft_strlcpy(char *dst, char *src, size_t	size)
 {

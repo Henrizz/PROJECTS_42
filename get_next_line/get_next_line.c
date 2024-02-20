@@ -6,7 +6,7 @@
 /*   By: hzimmerm <hzimmerm@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:41:49 by hzimmerm          #+#    #+#             */
-/*   Updated: 2024/02/16 18:13:53 by hzimmerm         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:30:53 by hzimmerm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ char	*ft_excerpt_line(char *temp)
 		line[i] = temp[i];
 		i++;
 	}
-	line[i] = '\0';
+	if (temp[i] == '\n')
+		line[i] = temp[i];
+	line[i + 1] = '\0';
 	return (line);
 }
 
@@ -94,53 +96,31 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = ft_excerpt_line(temp);
 	if (!line)
+	{
+		free(temp);
+		temp = NULL;
 		return (NULL);
+	}
 	temp = keep_rest(temp);
 	return (line);
 }
-	/*
-	
-	{
-		bytes_read = ft_read_and_check(fd, buffer, BUFFER_SIZE, temp, line);
-		if (bytes_read == 0)
-			return (NULL);
-		temp = ft_strjoin(temp, buffer);
-		if (!temp)
-			return (NULL);
-	}
-	if (new_line_check(temp) == 1 || bytes_read == 0)
-	{
-		line = ft_excerpt_line(temp);
-		//printf("line: %s, temp: %s\n", line, temp);
-		if (!line)
-			return (NULL);
-		temp = keep_rest(temp);
-		//printf("line2: %s, temp2: %s\n", line, temp);
-		if (!temp)
-			return (NULL);
-	}
-	return (line);*/
 /*
 int	main(void)
 {
 	int		fd;
 	char	*str;
 
-	fd = open("text.txt", O_RDONLY);
+	//fd = open("/dev/null", O_RDONLY);
+	fd = open("read_error.txt", O_RDONLY);
 	str = get_next_line(fd);
-	printf("%s\n", str);
+	printf("%s", str);
 	free(str);
-	str = get_next_line(fd);
-	printf("%s\n", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s\n", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s\n", str);
-	free(str);
-	str = get_next_line(fd);
-	printf("%s\n", str);
-	free(str);
+	while (str)
+	{
+		str = get_next_line(fd);
+		printf("%s", str);
+		free(str);
+	}
+	close(fd);
 	return (0);
 }*/
