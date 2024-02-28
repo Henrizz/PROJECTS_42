@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Henriette <Henriette@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:30:03 by hzimmerm          #+#    #+#             */
-/*   Updated: 2024/02/27 15:20:15 by Henriette        ###   ########.fr       */
+/*   Updated: 2024/02/28 13:38:05 by Henriette        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4
 # endif
+# define MAX_FD 10240
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -31,6 +32,5 @@ char	*ft_excerpt_line(char *temp);
 char	*keep_rest(char *temp);
 int		new_line_check(const char *str);
 void	*ft_calloc(size_t count, size_t size);
-char	*ft_strchr(const char *s, int c);
 
 #endif

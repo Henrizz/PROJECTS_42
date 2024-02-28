@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Henriette <Henriette@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:41:49 by hzimmerm          #+#    #+#             */
-/*   Updated: 2024/02/28 13:31:12 by Henriette        ###   ########.fr       */
+/*   Updated: 2024/02/28 13:37:23 by Henriette        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	new_line_check(const char *str)
 {
@@ -85,49 +85,66 @@ char	*keep_rest(char *temp)
 
 char	*get_next_line(int fd)
 {
-	static char	*temp;
+	static char	*temp[MAX_FD];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		if (temp)
-			free (temp);
-		temp = NULL;
+		if (temp[fd])
+			free (temp[fd]);
+		temp[fd] = NULL;
 		return (NULL);
 	}
-	if (!temp)
-		temp = (char *)ft_calloc(1, sizeof(char));
-	if (!temp)
+	if (!temp[fd])
+		temp[fd] = (char *)ft_calloc(1, sizeof(char));
+	if (!temp[fd])
 		return (NULL);
-	temp = ft_read_and_check(fd, temp);
-	line = ft_excerpt_line(temp);
+	temp[fd] = ft_read_and_check(fd, temp[fd]);
+	line = ft_excerpt_line(temp[fd]);
 	if (!line)
 	{
-		free(temp);
-		temp = NULL;
+		free(temp[fd]);
+		temp[fd] = NULL;
 		return (NULL);
 	}
-	temp = keep_rest(temp);
+	temp[fd] = keep_rest(temp[fd]);
 	return (line);
 }
 
 /*
 int	main(void)
 {
-	int		fd;
-	char	*str;
+	int		fd1;
+	int		fd2;
+	int		fd3;
+	char *str1;
+	char *str2;
+	char *str3;
 
 	//fd = open("/dev/null", O_RDONLY);
-	fd = open("1char.txt", O_RDONLY);
-	str = get_next_line(fd);
-	printf("%s", str);
-	free(str);
-	while (str)
+	fd1 = open("text.txt", O_RDONLY);
+	str1 = get_next_line(fd1);
+	printf("%s", str1);
+	free(str1);
+	fd2 = open("abc.txt", O_RDONLY);
+	str2 = get_next_line(fd2);
+	printf("%s", str2);
+	free(str2);
+	fd3 = open("123.txt", O_RDONLY);
+	str3 = get_next_line(fd3);
+	printf("%s", str3);
+	free(str3);
+	while (str1 && str2)
 	{
-		str = get_next_line(fd);
-		printf("%s", str);
-		free(str);
+		str1 = get_next_line(fd1);
+		printf("%s", str1);
+		free(str1);
+		str2 = get_next_line(fd2);
+		printf("%s", str2);
+		free(str2);
 	}
-	close(fd);
+	close(fd1);
+	close(fd2);
+	close(fd3);
 	return (0);
 }*/
